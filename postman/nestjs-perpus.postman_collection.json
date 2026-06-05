@@ -1,0 +1,699 @@
+{
+  "info": {
+    "_postman_id": "c3c7b0b3-7e3f-4a2f-a9f0-7f0d2f25a001",
+    "name": "nestJs-Perpus API",
+    "description": "Postman collection untuk endpoint NestJS project ini. Import bersama environment yang disertakan, lalu sesuaikan baseUrl, token, dan id sesuai data kamu.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"perpus\",\n  \"password\": \"Password123!\",\n  \"role\": \"ADMIN\",\n  \"memberId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find All User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user/findall",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "findall"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find One User",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/user/findone/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "findone",
+                "{{userId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"perpus-updated\",\n  \"password\": \"Password123!\",\n  \"role\": \"PETUGAS\",\n  \"memberId\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/user/update/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "update",
+                "{{userId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/user/delete/{{userId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "user",
+                "delete",
+                "{{userId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Book",
+      "item": [
+        {
+          "name": "Create Book",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Laskar Pelangi\",\n  \"author\": \"Andrea Hirata\",\n  \"year\": 2005\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/book/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "book",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find All Book",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/book/findall",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "book",
+                "findall"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find One Book",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/book/findone/{{bookId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "book",
+                "findone",
+                "{{bookId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Book",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Laskar Pelangi Revisi\",\n  \"author\": \"Andrea Hirata\",\n  \"year\": 2006\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/book/update/{{bookId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "book",
+                "update",
+                "{{bookId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Book",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/book/delete/{{bookId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "book",
+                "delete",
+                "{{bookId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Member",
+      "item": [
+        {
+          "name": "Create Member",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"perpus\",\n  \"className\": \"XII RPL 1\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/member/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "member",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find All Member",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/member/findall",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "member",
+                "findall"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find One Member",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/member/findone/{{memberId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "member",
+                "findone",
+                "{{memberId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Member",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Perpus Updated\",\n  \"className\": \"XII RPL 2\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/member/update/{{memberId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "member",
+                "update",
+                "{{memberId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Member",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/member/delete/{{memberId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "member",
+                "delete",
+                "{{memberId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Student",
+      "item": [
+        {
+          "name": "Create Student",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nis\": \"12345678\",\n  \"name\": \"Budi Santoso\",\n  \"email\": \"budi@example.com\",\n  \"kelas\": \"XII RPL 1\",\n  \"jurusan\": \"RPL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/student/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "create"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find All Student",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/student/findall",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "findall"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find One Student",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/student/findone/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "findone",
+                "{{studentId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Student",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nis\": \"12345678\",\n  \"name\": \"Budi Santoso\",\n  \"email\": \"budi.updated@example.com\",\n  \"kelas\": \"XII RPL 2\",\n  \"jurusan\": \"RPL\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/student/update/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "update",
+                "{{studentId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Student",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/student/delete/{{studentId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "student",
+                "delete",
+                "{{studentId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Walas",
+      "item": [
+        {
+          "name": "Create Walas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_walas\": \"Ibu Siti\",\n  \"no_tlpn\": \"081234567890\",\n  \"alamat\": \"Bandung\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/walas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "walas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find All Walas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/walas",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "walas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Find One Walas",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/walas/{{walasId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "walas",
+                "{{walasId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Walas",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_walas\": \"Ibu Siti Updated\",\n  \"no_tlpn\": \"081234567891\",\n  \"alamat\": \"Jakarta\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/walas/{{walasId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "walas",
+                "{{walasId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Walas",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/walas/{{walasId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "walas",
+                "{{walasId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transaksi",
+      "item": [
+        {
+          "name": "Pinjam Buku",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_student\": 1,\n  \"id_book\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tranksaksi/pinjam",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tranksaksi",
+                "pinjam"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Balik Buku",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id_peminjaman\": 1\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/tranksaksi/balik",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tranksaksi",
+                "balik"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

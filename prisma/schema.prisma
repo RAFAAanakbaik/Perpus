@@ -1,0 +1,87 @@
+generator client {
+  provider      = "prisma-client"
+  output        = "../generated/prisma"
+  compilerBuild = "fast"
+  moduleFormat  = "cjs"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  role      UserRole
+  memberId  Int?
+  createdAt DateTime @default(now())
+  member    member?  @relation(fields: [memberId], references: [id])
+
+  @@index([memberId], map: "user_memberId_fkey")
+}
+
+model book {
+  id         Int          @id @default(autoincrement())
+  title      String
+  author     String
+  year       Int
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime
+  peminjaman peminjaman[]
+}
+
+model member {
+  id        Int      @id @default(autoincrement())
+  name      String
+  className String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  users     user[]
+}
+
+model peminjaman {
+  id           Int           @id @default(autoincrement())
+  id_student   Int
+  id_book      Int
+  tgl_pinjaman DateTime      @default(now())
+  tgl_kembali  DateTime?
+  book         book          @relation(fields: [id_book], references: [id], map: "Peminjaman_id_book_fkey")
+  student      student       @relation(fields: [id_student], references: [id], map: "Peminjaman_id_student_fkey")
+  pengembalian pengembalian?
+
+  @@index([id_book], map: "Peminjaman_id_book_fkey")
+  @@index([id_student], map: "Peminjaman_id_student_fkey")
+}
+
+model pengembalian {
+  id            Int        @id @default(autoincrement())
+  id_peminjaman Int        @unique(map: "Pengembalian_id_peminjaman_key")
+  tgl_kembali   DateTime   @default(now())
+  peminjaman    peminjaman @relation(fields: [id_peminjaman], references: [id], map: "Pengembalian_id_peminjaman_fkey")
+}
+
+model student {
+  id         Int          @id @default(autoincrement())
+  nis        String       @unique(map: "Student_nis_key")
+  name       String
+  email      String?      @unique(map: "Student_email_key")
+  kelas      String
+  jurusan    String
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime
+  peminjaman peminjaman[]
+}
+
+model walas {
+  id_walas   Int    @id @default(autoincrement())
+  nama_walas String
+  no_tlpn    String
+  alamat     String
+}
+
+enum UserRole {
+  ADMIN
+  PETUGAS
+  MEMBER
+}
