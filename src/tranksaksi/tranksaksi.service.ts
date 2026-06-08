@@ -158,4 +158,42 @@ export class TranksaksiService {
       );
     }
   }
+
+  async findOne(id: number) {
+    try {
+      const transaksi = await this.prisma.peminjaman.findUnique({
+        where: { id },
+        include: {
+          student: true,
+          book: {
+            select: {
+              id: true,
+              title: true,
+              author: true,
+              year: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+          pengembalian: true,
+        },
+      });
+
+      if (!transaksi) {
+        throw new HttpException(
+          'Transaksi tidak ditemukan',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return transaksi;
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      console.log(error);
+      throw new HttpException(
+        'Terjadi kesalahan saat mengambil detail transaksi',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

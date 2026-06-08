@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { TranksaksiService } from './tranksaksi.service';
 import { BalikDto } from './dto/balik.dto';
 import { PinjamDto } from './dto/pinjam.dto';
@@ -24,5 +24,11 @@ export class TranksaksiController {
   @Get('findall')
   findAll() {
     return this.tranksaksiService.findAll();
+  }
+
+  @Roles('PETUGAS')
+  @Get('findone/:id')
+  findOne(@Param('id') id: string) {
+    return this.tranksaksiService.findOne(+id);
   }
 }

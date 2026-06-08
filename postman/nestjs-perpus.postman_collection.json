@@ -714,6 +714,29 @@
               ]
             }
           }
+        },
+        {
+          "name": "Lihat Detail Transaksi",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/tranksaksi/findone/{{peminjamanId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "tranksaksi",
+                "findone",
+                "{{peminjamanId}}"
+              ]
+            }
+          }
         }
       ]
     }
