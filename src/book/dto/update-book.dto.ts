@@ -5,11 +5,17 @@ import { IsOptional, IsString, IsNumber } from 'class-validator';
 export class UpdateBookDto extends PartialType(CreateBookDto) {
   @IsOptional()
   @IsString()
-  title!: string;
+  title?: string;
+
   @IsOptional()
   @IsString()
-  author!: string;
+  author?: string;
+
   @IsOptional()
   @IsNumber()
-  year!: number;
+  year?: number;
+
+  @IsOptional()
+  @IsNumber()
+  stok?: number;
 }

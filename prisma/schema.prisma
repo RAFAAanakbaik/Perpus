@@ -26,6 +26,7 @@ model book {
   title      String
   author     String
   year       Int
+  stok       Int          @default(1)     
   createdAt  DateTime     @default(now())
   updatedAt  DateTime
   peminjaman peminjaman[]

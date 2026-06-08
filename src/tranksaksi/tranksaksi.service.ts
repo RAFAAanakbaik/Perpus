@@ -9,57 +9,153 @@ export class TranksaksiService {
 
   async pinjam(pinjamDto: PinjamDto) {
     try {
-      const pinjam = await this.prisma.peminjaman.create({
-        data: { ...pinjamDto },
-      });
+      const [student, book] = await Promise.all([
+        this.prisma.student.findUnique({ where: { id: pinjamDto.id_student } }),
+        this.prisma.book.findUnique({ where: { id: pinjamDto.id_book } }),
+      ]);
 
-      if (!pinjam) {
+      if (!student)
         throw new HttpException(
-          'failed borrowing book',
+          'Student tidak ditemukan',
+          HttpStatus.NOT_FOUND,
+        );
+      if (!book)
+        throw new HttpException('Buku tidak ditemukan', HttpStatus.NOT_FOUND);
+
+      // Cek Stok
+      if (book.stok <= 0) {
+        throw new HttpException(
+          `Maaf stok buku "${book.title}" sedang habis / sudah digunakan semua`,
           HttpStatus.BAD_REQUEST,
         );
       }
 
-      return pinjam;
+      const result = await this.prisma.$transaction(async (tx) => {
+        const peminjamanAktif = await tx.peminjaman.findFirst({
+          where: {
+            id_book: pinjamDto.id_book,
+            tgl_kembali: null,
+          },
+        });
+
+        if (peminjamanAktif) {
+          throw new HttpException(
+            `Buku "${book.title}" sedang dipinjam`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        // Kurangi stok secara atomik supaya buku yang sudah dipinjam tidak bisa dipinjam lagi.
+        const updateBook = await tx.book.updateMany({
+          where: {
+            id: pinjamDto.id_book,
+            stok: { gt: 0 },
+          },
+          data: { stok: { decrement: 1 } },
+        });
+
+        if (updateBook.count === 0) {
+          throw new HttpException(
+            `Maaf stok buku "${book.title}" sedang habis / sudah digunakan semua`,
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        const newPinjam = await tx.peminjaman.create({
+          data: pinjamDto,
+          include: { book: true, student: true },
+        });
+
+        return newPinjam;
+      });
+
+      return result;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       console.log(error);
+      throw new HttpException(
+        'Terjadi kesalahan saat meminjam',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   async balik(balikDto: BalikDto) {
     try {
-      const balik = await this.prisma.pengembalian.create({
-        data: { ...balikDto },
+      const peminjaman = await this.prisma.peminjaman.findUnique({
+        where: { id: balikDto.id_peminjaman },
+        include: { book: true, pengembalian: true },
       });
 
-      if (!balik) {
+      if (!peminjaman)
         throw new HttpException(
-          'failed returning book',
+          'Peminjaman tidak ditemukan',
+          HttpStatus.NOT_FOUND,
+        );
+      if (peminjaman.pengembalian)
+        throw new HttpException(
+          'Buku sudah dikembalikan',
           HttpStatus.BAD_REQUEST,
         );
-      }
 
-      const updtBalik = await this.prisma.peminjaman.update({
-        where: { id: balik.id_peminjaman },
-        data: { tgl_kembali: balik.tgl_kembali },
+      const result = await this.prisma.$transaction(async (tx) => {
+        const pengembalian = await tx.pengembalian.create({
+          data: { id_peminjaman: balikDto.id_peminjaman },
+        });
+
+        await tx.peminjaman.update({
+          where: { id: balikDto.id_peminjaman },
+          data: { tgl_kembali: pengembalian.tgl_kembali },
+        });
+
+        // Tambah stok kembali
+        await tx.book.update({
+          where: { id: peminjaman.id_book },
+          data: { stok: { increment: 1 } },
+        });
+
+        return pengembalian;
       });
 
-      if (!updtBalik) {
-        throw new HttpException(
-          'failed returning book',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      return updtBalik;
+      return result;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       console.log(error);
+      throw new HttpException(
+        'Terjadi kesalahan saat pengembalian',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findAll() {
+    try {
+      return await this.prisma.peminjaman.findMany({
+        include: {
+          student: true,
+          book: {
+            select: {
+              id: true,
+              title: true,
+              author: true,
+              year: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
+          pengembalian: true,
+        },
+        orderBy: {
+          tgl_pinjaman: 'desc',
+        },
+      });
+    } catch (error) {
+      if (error instanceof HttpException) throw error;
+      console.log(error);
+      throw new HttpException(
+        'Terjadi kesalahan saat mengambil data transaksi',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }

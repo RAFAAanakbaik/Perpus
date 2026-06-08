@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { TranksaksiService } from './tranksaksi.service';
 import { BalikDto } from './dto/balik.dto';
 import { PinjamDto } from './dto/pinjam.dto';
@@ -18,5 +18,11 @@ export class TranksaksiController {
   @Post('balik')
   balik(@Body() balikDto: BalikDto) {
     return this.tranksaksiService.balik(balikDto);
+  }
+
+  @Roles('PETUGAS')
+  @Get('findall')
+  findAll() {
+    return this.tranksaksiService.findAll();
   }
 }

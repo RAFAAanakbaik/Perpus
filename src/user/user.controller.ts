@@ -17,11 +17,13 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+  
   @Public()
   @Post('create')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
+
   @ApiBearerAuth('access-token')
   @Roles('ADMIN')
   @Get('findall')

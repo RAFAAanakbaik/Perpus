@@ -16,48 +16,31 @@ export class BookService {
         },
       });
 
-      if (!add) {
-        throw new HttpException('failed creating book', HttpStatus.BAD_REQUEST);
-      }
-
       return add;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
+      if (error instanceof HttpException) throw error;
       console.log(error);
+      throw new HttpException('Terjadi kesalahan saat membuat buku', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async findAll() {
     try {
-      const find = await this.prisma.book.findMany({});
-
-      return find;
+      return await this.prisma.book.findMany({});
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
       console.log(error);
+      throw new HttpException('Terjadi kesalahan', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async findOne(id: number) {
     try {
-      const find = await this.prisma.book.findFirst({
-        where: { id },
-      });
-
-      if (!find) {
-        throw new HttpException('book not found', HttpStatus.NOT_FOUND);
-      }
-
+      const find = await this.prisma.book.findFirst({ where: { id } });
+      if (!find) throw new HttpException('book not found', HttpStatus.NOT_FOUND);
       return find;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      console.log(error);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException('Terjadi kesalahan', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -70,34 +53,20 @@ export class BookService {
           updatedAt: new Date(),
         },
       });
-
-      if (!updt) {
-        throw new HttpException('failed updating book', HttpStatus.BAD_REQUEST);
-      }
-
       return updt;
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      console.log(error);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException('Terjadi kesalahan saat update', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async remove(id: number) {
     try {
-      const delt = await this.prisma.book.delete({ where: { id } });
-
-      if (!delt) {
-        throw new HttpException('failed deleting book', HttpStatus.BAD_REQUEST);
-      }
-
+      await this.prisma.book.delete({ where: { id } });
       return 'successfully deleting book';
     } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-      console.log(error);
+      if (error instanceof HttpException) throw error;
+      throw new HttpException('Terjadi kesalahan', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 }
